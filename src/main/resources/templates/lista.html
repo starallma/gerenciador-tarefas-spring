@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <title>Gerenciador de Tarefas</title>
+
+    <style>
+
+        body{
+        font-family: Arial;
+        margin:40px;
+        }
+
+        table{
+        border-collapse: collapse;
+        width:100%;
+        }
+
+        th, td{
+        border:1px solid #ccc;
+        padding:10px;
+        }
+
+        th{
+        background:#f2f2f2;
+        }
+
+        .ativo{
+        font-weight:bold;
+        color:red;
+        }
+
+        .filtros a{
+        margin-right:10px;
+        text-decoration:none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>Gerenciador de Tarefas</h1>
+
+<p>
+    Você tem
+    <b th:text="${total}"></b> tarefas
+    (
+    <span th:text="${pendentes}"></span> pendentes,
+    <span th:text="${concluidas}"></span> concluídas
+    )
+</p>
+
+<div class="filtros">
+
+    <a th:href="@{/tarefas}"
+       th:classappend="${filtro == 'todas'} ? 'ativo'">
+        Todas
+    </a>
+
+    |
+
+    <a th:href="@{/tarefas(filtro='pendentes')}"
+       th:classappend="${filtro == 'pendentes'} ? 'ativo'">
+        Pendentes
+    </a>
+
+    |
+
+    <a th:href="@{/tarefas(filtro='concluidas')}"
+       th:classappend="${filtro == 'concluidas'} ? 'ativo'">
+        Concluídas
+    </a>
+
+</div>
+
+<hr>
+
+<form action="/tarefas" method="post">
+
+    <input type="text" name="titulo" placeholder="Título da tarefa" required>
+
+    <input type="text" name="descricao" placeholder="Descrição">
+
+    <button type="submit">
+        Adicionar
+    </button>
+
+</form>
+
+<br>
+
+<table>
+
+    <tr>
+
+        <th>Título</th>
+        <th>Descrição</th>
+        <th>Status</th>
+        <th>Ações</th>
+
+    </tr>
+
+    <tr th:each="t : ${tarefas}">
+
+        <td th:text="${t.titulo}"></td>
+
+        <td th:text="${t.descricao}"></td>
+
+        <td th:text="${t.concluida} ? 'Concluída' : 'Pendente'"></td>
+
+        <td>
+
+            <a th:href="@{/tarefas/excluir/{id}(id=${t.id})}">
+                Excluir
+            </a>
+
+        </td>
+
+    </tr>
+
+</table>
+
+</body>
+
+</html>
